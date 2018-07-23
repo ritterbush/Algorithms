@@ -150,7 +150,7 @@ def is_prime_efficient(n):
 
     """m = sqrt_int_plus_one(n) /// 
        m = int(sqrt(n)) + 1 ///Older square root methods """
-     m = int(square_root(n)) + 1
+    m = int(square_root(n)) + 1
 
     while m > 1:
         if n % m == 0:
@@ -204,6 +204,16 @@ def compose1(f, g):
     def h(x):
         return f(g(x))
     return h
+
+square_of_successor = compose1(square, successor)
+
+
+
+
+
+
+
+
 
 
 
