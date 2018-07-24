@@ -118,6 +118,11 @@ def root(n, a):
     return find_zero(f, df)
 
 
+def make_deriv(f):
+    def df(n):
+        return f(n+1)  - f(n)
+    return df
+
 
 def is_prime(n):
     """
@@ -209,20 +214,107 @@ square_of_successor = compose1(square, successor)
 
 
 
+def fib(n):
+    """Compute the nth Fibonacci number. Note that the single-lined assignment cannotacheive same result if rewritten into two lines. Needs a temp to do so. See fib_with_temp.
+
+    >>> fib(0)
+    0
+    >>> fib(8)
+    21
+    """
+    k, num, last = 0, 0, 1
+    while k < n:
+        num, last = num + last, num
+        k = k + 1
+    return num
 
 
 
 
+def fib_with_temp(n):
+    """Compute the nth Fibonacci number.
+
+    >>> fib(0)
+    0
+    >>> fib(8)
+    21
+    """
+    k, num, last = 0, 0, 1
+    while k < n:
+        temp = num
+        num = num + last
+        last = temp
+        k = k + 1
+    return num
+
+
+def sequence(term, n):
+    """Returns the values of a sequence in order.
+
+    >>> sequence(fib, 8)
+    0
+    1
+    1
+    2
+    3
+    5
+    8
+    """
+
+    k = 0
+    while k <= n:
+        print(term(k))
+        term(k)
+        k
+        k = k + 1
+    return "Figure this out later"
+
+def map_to_range(start, end, f):
+    while start <= end:
+        print(f(start))
+        start = start + 1
+
+def curry2(f):
+    """Return a curried version of the given two-argument function."""
+    def g(x):
+        def h(y):
+            return f(x, y)
+        return h
+    return g
+
+def uncurry2(g):
+    """Return a two-argument version of the given curried function."""
+    def f(x, y):
+        return g(x)(y)
+    return f
+
+
+def trace(fn):
+    """Returns a version of fn that prints before it is
+    called. The functions below use trace as a decorator."""
+    def wrapped(x):
+        print('-> ', fn, '(', x, ')')
+        return fn(x)
+    return wrapped
+
+"""below are decorated functions. In general, these are equiv to assigning 
+fn = higher_order_fn(fn) after def statement"""
+
+@trace
+def triple(x):
+    return 3 * x
+
+@trace
+def sum_squares_up_to(n):
+    k = 1
+    total = 0
+    while k <= n:
+        total, k = total + square(k), k + 1
+    return total
 
 
 
+ab_plus_cd = lambda a,b,c,d: a*b + c*d
 
-
-
-
-
-
-
-
-
+(lambda a,b,c,d,e,f: a*b + c*d + e*f)(1,2,3,4,5,6)
 
