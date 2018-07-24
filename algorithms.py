@@ -251,7 +251,7 @@ def fib_with_temp(n):
 def sequence(term, n):
     """Returns the values of a sequence in order.
 
-    >>> sequence(fib, 8)
+    >>> sequence(fib, 7)
     0
     1
     1
@@ -259,6 +259,7 @@ def sequence(term, n):
     3
     5
     8
+    13
     """
 
     k = 0
@@ -267,7 +268,7 @@ def sequence(term, n):
         term(k)
         k
         k = k + 1
-    return "Figure this out later"
+    return "Figure this out later; use tuples?"
 
 def map_to_range(start, end, f):
     while start <= end:
@@ -317,4 +318,103 @@ def sum_squares_up_to(n):
 ab_plus_cd = lambda a,b,c,d: a*b + c*d
 
 (lambda a,b,c,d,e,f: a*b + c*d + e*f)(1,2,3,4,5,6)
+
+
+def gcd(a, b):
+    if a == 0:
+        return b
+    return gcd(b%a, a)
+
+def add_rationals(x, y):
+    nx, dx = numer(x), denom(x)
+    ny, dy = numer(y), denom(y)
+    return rational(nx * dy + ny * dx, dx * dy)
+
+def mul_rationals(x, y):
+    return rational(numer(x) * numer(y), denom(x) * denom(y))
+
+def div_rationals(x, y):
+    return rational(numer(x) * denom(y), denom(x) * numer(y))
+
+def square_rational(x):
+    return mul_rationals(x, x)
+
+def power_rational(x, n):
+    """
+    Returns x^n where x is a rational
+    """
+    product = rational(1, 1)
+    k = 0
+    while k < n:
+        product, k = mul_rationals(product, x), k + 1
+    return product
+
+
+def print_rational(x):
+    print(numer(x), '/', denom(x))
+
+def rationals_are_equal(x, y):
+    return (numer(x) * denom(y) == numer(y) * denom(x))
+
+
+def pair(x, y):
+    """Return a function that represents a pair."""
+    def get(index):
+        if index == 0:
+            return x
+        elif index == 1:
+            return y
+        else:
+            return "Invalid index!"
+    return get
+
+def select(p, i):
+    """Return the element at index i of pair p."""
+    return p(i)
+
+def rational(n, d):
+    """Returns rational reduced to lowest terms"""
+    g = gcd(n, d)
+    return pair(n//g, d//g)
+
+def numer(x):
+    return select(x, 0)
+
+def denom(x):
+    return select(x, 1)
+
+
+
+def sum_digits(n):
+    """Return the sum of the digits of positive integer n."""
+    if n < 10:
+        return n
+    else:
+        all_but_last, last = n // 10, n % 10
+        return sum_digits(all_but_last) + last
+
+def fact(n):
+    if n == 0:
+        return 1
+    else:
+        return n * fact(n-1)
+
+def fact_iter(n):
+    total, k = 1, 1
+    while k <= n:
+        total, k = total*k, k+1
+    return total
+
+def k_amount(k):
+    while k >= 0:
+        return k
+        k = k - 1
+
+
+
+
+
+
+
+
 
