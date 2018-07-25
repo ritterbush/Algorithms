@@ -270,6 +270,17 @@ def sequence(term, n):
         k = k + 1
     return "Figure this out later; use tuples?"
 
+
+def k_amount(k):
+    """Turns out k_amount cannot return multiple values"""
+    while k >= 0:
+        return k
+        k = k - 1
+
+
+
+
+
 def map_to_range(start, end, f):
     while start <= end:
         print(f(start))
@@ -385,6 +396,12 @@ def denom(x):
 
 
 
+
+
+
+
+
+
 def sum_digits(n):
     """Return the sum of the digits of positive integer n."""
     if n < 10:
@@ -405,11 +422,263 @@ def fact_iter(n):
         total, k = total*k, k+1
     return total
 
-def k_amount(k):
-    while k >= 0:
-        return k
-        k = k - 1
+def split(n):
+    """
+    Note: Typerror if split(split(n)) is called
+    """
+    return n // 10, n % 10
 
+def luhn_sum(n):
+    if n < 10:
+        return n
+    else:
+        all_but_last, last = split(n)
+        return luhn_sum_double(all_but_last) + last
+
+def luhn_sum_double(n):
+    all_but_last, last = split(n)
+    luhn_digit = sum_digits(2 * last)
+    if n < 10:
+        return luhn_digit
+    else:
+        return luhn_sum(all_but_last) + luhn_digit
+
+def is_luhn_valid(n):
+    return luhn_sum(n) % 10 == 0
+
+def how_many_luhn_valid(n):
+    """
+    Calculates how many numbers n are luhn valid.
+    Results: 9 if n=1e2
+            99 if n=1e3
+           999 if n=ne4
+          9999 if n=ne5 
+    You see the pattern!
+    So the average 16-digit CC is one of 900 trillion valid numbers.
+    """
+    total = 0
+    while n > 0:
+        if is_luhn_valid(n):
+            total = total + 1
+        n = n - 1
+    return total
+
+
+def print_luhn_valid_nums(n):
+    """
+    Prints all luhn valid numbers to n inclusive.
+    Be careful.
+    """
+    while n > 0:
+        if is_luhn_valid(n):
+            print(n)
+        n = n - 1
+    return print("End")
+
+
+def is_even_mutual_rec(n):
+    """Max recursion reached depth at n=998"""
+    if n == 0:
+        return True
+    elif n > 0:
+        return is_odd_mutual_rec(n-1)
+    else:
+        return is_odd_mutual_rec(n+1)
+
+
+def is_odd_mutual_rec(n):
+    """Max recursion reached depth at n=998"""
+    if n == 0:
+        return False
+    elif n > 0:
+        return is_even_mutual_rec(n-1)
+    else:
+        return is_even_mutual_rec(n+1)
+
+def is_even_single_rec(n):
+    """Max recursion depth reached at n=1996"""
+    if n == 0:
+        return True
+    elif n > 0:
+        if n-1 == 0:
+            return False
+        else:
+            return is_even_single_rec((n-1)-1)
+    else:
+        if n+1 == 0:
+            return False
+        else:
+            return is_even_single_rec((n+1)+1)
+
+def is_odd_single_rec(n):
+    """Max recursion depth reached at n=1996"""
+    if n == 0:
+        return False
+    elif n > 0:
+        if n-1 == 0:
+            return True
+        else:
+            return is_odd_single_rec((n-1)-1)
+    else:
+        if n+1 == 0:
+            return True
+        else:
+            return is_odd_single_rec((n+1)+1)
+
+
+def is_even_single_rec(n):
+    """Max recursion depth reached at n=1996"""
+    if n == 0:
+        return True
+    elif n > 0:
+        if n-1 == 0:
+            return False
+        else:
+            return is_even_single_rec((n-1)-1)
+    else:
+        if n+1 == 0:
+            return False
+        else:
+            return is_even_single_rec((n+1)+1)
+
+
+def is_even_iter(n):
+    """
+    Takes ~7 secs at n=1e8
+    Takes ~55 secs at n=1e9
+    """
+    if n == 0:
+        return True
+    elif n > 0:
+        k = n
+        while k > 0:
+            k = k - 2
+            if k == 0:
+                return True
+        return False
+    else:
+        k = n
+        while k < 0:
+            k = k + 2
+            if k == 0:
+                return True
+        return False
+
+
+def is_odd_iter(n):
+    """
+    Takes ~7 secs at n=1e8
+    Takes ~55 secs at n=1e9
+    """
+    if n == 0:
+        return False
+    elif n > 0:
+        k = n
+        while k > 0:
+            k = k - 2
+            if k == 0:
+                return False
+        return True
+    else:
+        k = n
+        while k < 0:
+            k = k + 2
+            if k == 0:
+                return False
+        return True
+
+
+def is_even(n):
+    if n == 0:
+        return True
+    elif n == 1:
+        return False
+    else:
+        return is_even(n % 2)
+
+def is_odd(n):
+    if n == 0:
+        return False
+    elif n == 1:
+        return True
+    else:
+        return is_odd(n % 2)
+
+def cascade(n):
+    if n < 10:
+        print(n)
+    else:
+        print(n)
+        cascade(n//10)
+        print(n)
+
+def inverse_cascade(n):
+    inverse_cascade_first_half(n)
+    inverse_cascade_last_half(n//10)
+
+def inverse_cascade_first_half(n):
+    if n < 10:
+        print(n)
+    else:
+        inverse_cascade_first_half(n//10)
+        print(n)
+
+def inverse_cascade_last_half(n):
+    if n >= 10:
+        print(n)
+        inverse_cascade_last_half(n//10)
+    else:
+        print(n)
+
+def inverse_cascade_alt(n):
+    grow(n)
+    print(n)
+    shrink(n)
+
+def f_then_g(f, g, n):
+    if n:
+        f(n)
+        g(n)
+
+grow = lambda n: f_then_g(grow, print, n//10)
+shrink = lambda n: f_then_g(print, shrink, n//10)
+
+
+def fib(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return fib(n-2) + fib(n-1)
+
+
+
+def trace_update(fn):
+    """Returns a version of fn that prints before it is
+    called. The functions below use trace as a decorator."""
+    space_length = [0]
+
+    def wrapped(x):
+        space = ' ' * space_length[0]
+        space_length[0] = space_length[0] + 1
+        print(space, fn.__name__, '(', x, ')', ':', sep='')
+        result = fn(x)
+        print(space, fn.__name__, '(', x, ')', ' -> ', result, sep='')
+        space_length[0] = space_length[0] - 1
+        return result
+    return wrapped
+
+
+
+@trace_update
+def fib_traced(n):
+    if n == 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return fib_traced(n-2) + fib_traced(n-1)
 
 
 
