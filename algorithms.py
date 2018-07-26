@@ -250,7 +250,9 @@ square_of_successor = compose1(square, successor)
 
 
 def fib(n):
-    """Compute the nth Fibonacci number. Note that the single-lined assignment cannot acheive same result if rewritten into two lines. Needs a temp to do so. See fib_with_temp.
+    """Compute the nth Fibonacci number. Note that the single-lined 
+    assignment cannot acheive same result if rewritten into two lines. 
+    Needs a temp to do so. See fib_with_temp.
 
     >>> fib(0)
     0
@@ -280,7 +282,8 @@ def fib_with_temp(n):
     return num
 
 def sequence(term, n):
-    """Returns a tuple of a sequence up to n in order. Note that functions always return only a single value.
+    """Returns a tuple of a sequence up to n in order. Note that 
+    functions always return only a single value.
 
     >>> sequence(fib, 7)
     (0, 1, 1, 2, 3, 5, 8, 13)
@@ -415,7 +418,7 @@ def print_luhn_valid_nums(n):
 
 @trace
 def is_even_mutual_rec(n):
-    """Max recursion reached depth at n=998"""
+    """Max recursion depth reached at n=998"""
     if n == 0:
         return True
     elif n > 0:
@@ -425,7 +428,7 @@ def is_even_mutual_rec(n):
 
 @trace
 def is_odd_mutual_rec(n):
-    """Max recursion reached depth at n=998"""
+    """Max recursion depth reached at n=998"""
     if n == 0:
         return False
     elif n > 0:
@@ -598,8 +601,105 @@ def count_partitions(n, m):
     else:
         return count_partitions(n-m, m) + count_partitions(n, m-1)
 
+
+def count_partitions_iter(n, m, total=0):
+    """Semi-iterative version of count_partitions that makes use of two semi-iterative functions, 
+    c_left and c_right. They are also  mutually recursive, but both functions terminate 
+    once the bottom of the tree is reached, without bringing the value recursively all 
+    the way back to the top node. Quick tests show it is about 5x faster than and has 1/3 
+    the calls of count_partitions."""
+    if n == 0:
+        return 1
+    if m == 0:
+        return 0
+
+    left_total = c_left(n, m)    
+    right_total = c_right(n, m)
+    total = left_total + right_total
+
+    return total
+
+def has_left(n, m):
+    return n - m >= 0
+    
+def has_right(m):
+    return m > 1
+
 @trace2
-def count_partitions_iter(n, m):
+def c_left(n, m, total=0):
+
+    while has_left(n, m):
+        n = n - m
+        if n == 0:
+            total = total + 1
+        if has_right(m):
+            total = total + c_right(n, m)
+
+    return total
+
+@trace2
+def c_right(n, m, total=0):
+
+    while has_right(m):
+        m = m - 1
+        if has_left(n, m):
+            total = total + c_left(n, m)
+
+    return total
+
+
+def attempt_countp_iter_whiles(n, m):
+    """It looks like a single function of count_partitions with while loops is not 
+    possible since n and m always need to be calculated in two different ways, which 
+    would usually require the first way also needing to be computed after the second 
+    way and vice vera; and so the amount of while loops needed would compund; e.g. 
+    the first way needs to be computed to an end result, but so does the second way 
+    on each step of those, and  the first for each of those, and so on."""
+    if n == 0:
+        return 1
+    if m == 0:
+        return 0
+
+    total = 0
+    n1 = n
+    m1 = m
+
+    6, 2
+
+    while m > 0:
+
+
+        while n > 0:
+            4, 2
+
+            m_dec = m - 1
+            n_keep = n
+
+            while n > 0:
+
+                n = n - m_dec
+
+            
+
+                if n == 0:
+                    total = total + 1
+
+            n = n_keep
+
+            n = n - m
+            
+            if n == 0:
+                total = total + 1
+
+
+        m = m - 1
+
+    return total
+
+
+
+@trace2
+def attempt_count_p_iter_whiles(n, m):
     """Count the ways to partition a positive integer n, using parts up to size m."""
 
     total = 0
@@ -704,10 +804,10 @@ def denom(x):
     return select(x, 1)
 
 
-
-
-
-
-
-
-
+def factorial1c(n, acc=1):
+    while True:
+        if n < 2:
+            return 1 * acc
+        (n, acc) = (n - 1, acc * n)
+        continue
+        break
