@@ -6,7 +6,9 @@ def trace_old(fn):
         return fn(x)
     return wrapped
 
-"""Functions with @name above their def statement are decorated functions. In general, these are equiv. to assigning fn = name(fn) after def statement."""
+"""Functions with @name above their def statement are decorated 
+functions. In general, these are equiv. to assigning fn = name(fn) 
+after def statement."""
 
 def trace(fn):
     """Returns a version of fn(x) that prints before it is
