@@ -72,7 +72,7 @@ def improve(update, close, guess = 1, max_update=100):
     k = 0
     while not close(guess) and k < max_update:
         guess = update(guess)
-        print(guess)
+        "print(guess)"
         k = k + 1
     return guess
 
@@ -173,6 +173,9 @@ def is_prime(n):
     >>> is_prime(7)
     True
     """
+    
+    if n < 2:
+        return False 
 
     m = n - 1
 
@@ -191,7 +194,10 @@ def is_prime_efficient(n):
     >>> is_prime(7)
     True
     """
-    if n == 1 or n == 2:
+    if n < 2:
+        return False
+    
+    if n == 2:
         return True
 
     """m = sqrt_int_plus_one(n) /// 
@@ -612,7 +618,7 @@ def count_partitions_iter(n, m, total=0):
     the calls of count_partitions."""
     if n == 0:
         return 1
-    if m == 0:
+    if m <= 0:
         return 0
 
     left_total = c_left(n, m)    
@@ -646,6 +652,41 @@ def c_right(n, m, total=0):
         m = m - 1
         if has_left(n, m):
             total = total + c_left(n, m)
+
+    return total
+
+
+def count_partitions_iter_compact(n, m):
+
+    if n == 0:
+        return 1
+    if m <= 0:
+        return 0
+    
+    total = 0
+    left_total = left_partitions_iter_compact(n, m)    
+    right_total = right_partitions_iter_compact(n, m)
+    total = left_total + right_total
+
+    return total
+
+def left_partitions_iter_compact(n, m, total=0):
+
+    while n - m >= 0:
+        n = n - m
+        if n == 0:
+            total = total + 1
+        if m > 1:
+            total = right_partitions_iter_compact(n, m, total)
+
+    return total
+
+def right_partitions_iter_compact(n, m, total=0):
+
+    while m > 1:
+        m = m - 1
+        if n - m >= 0:
+            total = left_partitions_iter_compact(n, m, total)
 
     return total
 
@@ -698,49 +739,28 @@ def attempt_countp_iter_whiles(n, m):
 
     return total
 
-
-
 @trace2
 def attempt_count_p_iter_whiles(n, m):
     """Count the ways to partition a positive integer n, using parts up to size m."""
 
-    total = 0
-    k = n
-    j = m
+    if n == 0:
+        return 1
+    elif n < 0:
+        return 0
+    elif m <= 0:
+        return 0
+    else:
+        c_left = count_partitions(n-m, m)
+        c_right = count_partitions(n, m-1)
+        result = c_left + c_right
+       
+    return result
 
-    while j > 0:
-        k = n
-
-        """dif = k - j
-        if k == 0:
-            total = total + 1
-        if dif == 0:
-            total = total + 1"""
-        
-        while k > 0:
-
-            minus_j = j - 1
-            old_k = k
-            k = k - j
-            if k == 0:
-                total = total + 1
-     
-            while minus_j > 0:
-                old_k = old_k - minus_j
-                if old_k == 0:
-                    total = total + 1
-                minus_j = minus_j - 1
-
-        j = j - 1
-
-    """while k >= 0:
-        if k == 0:
-            total = total + 1
-        k = k - j"""
-    
-    return total
-
-
+@trace2
+def binomial(n, k):
+    if k == 0:
+        return 1
+    return n * binomial(n - 1, k - 1) // k
 
 def gcd(a, b):
     if a == 0:
